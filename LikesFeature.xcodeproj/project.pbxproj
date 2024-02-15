@@ -14,6 +14,9 @@
 		EF9561132B7D8745007D3F81 /* LikesFeatureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9561122B7D8745007D3F81 /* LikesFeatureTests.swift */; };
 		EF95611D2B7D8745007D3F81 /* LikesFeatureUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95611C2B7D8745007D3F81 /* LikesFeatureUITests.swift */; };
 		EF95611F2B7D8745007D3F81 /* LikesFeatureUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95611E2B7D8745007D3F81 /* LikesFeatureUITestsLaunchTests.swift */; };
+		EF95612E2B7D889A007D3F81 /* LikesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95612D2B7D8899007D3F81 /* LikesFeature.swift */; };
+		EF9561372B7D8A1D007D3F81 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EF9561362B7D8A1D007D3F81 /* Kingfisher */; };
+		EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9561392B7DD584007D3F81 /* LikesSendView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +47,8 @@
 		EF9561182B7D8745007D3F81 /* LikesFeatureUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LikesFeatureUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF95611C2B7D8745007D3F81 /* LikesFeatureUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesFeatureUITests.swift; sourceTree = "<group>"; };
 		EF95611E2B7D8745007D3F81 /* LikesFeatureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesFeatureUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		EF95612D2B7D8899007D3F81 /* LikesFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikesFeature.swift; sourceTree = "<group>"; };
+		EF9561392B7DD584007D3F81 /* LikesSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesSendView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF9561372B7D8A1D007D3F81 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,7 +80,7 @@
 		EF9560F52B7D8743007D3F81 = {
 			isa = PBXGroup;
 			children = (
-				EF9561002B7D8743007D3F81 /* LikesFeature */,
+				EF95612B2B7D8899007D3F81 /* Sources */,
 				EF9561112B7D8745007D3F81 /* LikesFeatureTests */,
 				EF95611B2B7D8745007D3F81 /* LikesFeatureUITests */,
 				EF9560FF2B7D8743007D3F81 /* Products */,
@@ -89,17 +95,6 @@
 				EF9561182B7D8745007D3F81 /* LikesFeatureUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		EF9561002B7D8743007D3F81 /* LikesFeature */ = {
-			isa = PBXGroup;
-			children = (
-				EF9561012B7D8743007D3F81 /* LikesFeatureApp.swift */,
-				EF9561032B7D8743007D3F81 /* ContentView.swift */,
-				EF9561052B7D8744007D3F81 /* Assets.xcassets */,
-				EF9561072B7D8744007D3F81 /* Preview Content */,
-			);
-			path = LikesFeature;
 			sourceTree = "<group>";
 		};
 		EF9561072B7D8744007D3F81 /* Preview Content */ = {
@@ -127,6 +122,83 @@
 			path = LikesFeatureUITests;
 			sourceTree = "<group>";
 		};
+		EF95612B2B7D8899007D3F81 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561302B7D88AA007D3F81 /* Window */,
+				EF95612F2B7D88A4007D3F81 /* Utils */,
+				EF9561072B7D8744007D3F81 /* Preview Content */,
+				EF9561312B7D88B2007D3F81 /* View */,
+				EF95612C2B7D8899007D3F81 /* LikesFeature */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		EF95612C2B7D8899007D3F81 /* LikesFeature */ = {
+			isa = PBXGroup;
+			children = (
+				EF95612D2B7D8899007D3F81 /* LikesFeature.swift */,
+			);
+			path = LikesFeature;
+			sourceTree = "<group>";
+		};
+		EF95612F2B7D88A4007D3F81 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561052B7D8744007D3F81 /* Assets.xcassets */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		EF9561302B7D88AA007D3F81 /* Window */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561012B7D8743007D3F81 /* LikesFeatureApp.swift */,
+			);
+			path = Window;
+			sourceTree = "<group>";
+		};
+		EF9561312B7D88B2007D3F81 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561342B7D8922007D3F81 /* Extension */,
+				EF9561332B7D891F007D3F81 /* Modifier */,
+				EF9561322B7D891C007D3F81 /* Main */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EF9561322B7D891C007D3F81 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561382B7DD57C007D3F81 /* CustomView */,
+				EF9561032B7D8743007D3F81 /* ContentView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		EF9561332B7D891F007D3F81 /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		EF9561342B7D8922007D3F81 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		EF9561382B7DD57C007D3F81 /* CustomView */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561392B7DD584007D3F81 /* LikesSendView.swift */,
+			);
+			path = CustomView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -143,6 +215,9 @@
 			dependencies = (
 			);
 			name = LikesFeature;
+			packageProductDependencies = (
+				EF9561362B7D8A1D007D3F81 /* Kingfisher */,
+			);
 			productName = LikesFeature;
 			productReference = EF9560FE2B7D8743007D3F81 /* LikesFeature.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +290,9 @@
 				Base,
 			);
 			mainGroup = EF9560F52B7D8743007D3F81;
+			packageReferences = (
+				EF9561352B7D8A1C007D3F81 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = EF9560FF2B7D8743007D3F81 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -258,7 +336,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF9561042B7D8743007D3F81 /* ContentView.swift in Sources */,
+				EF95612E2B7D889A007D3F81 /* LikesFeature.swift in Sources */,
 				EF9561022B7D8743007D3F81 /* LikesFeatureApp.swift in Sources */,
+				EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,8 +496,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"LikesFeature/Preview Content\"";
-				DEVELOPMENT_TEAM = JA868URLCA;
+				DEVELOPMENT_ASSET_PATHS = "\"Sources/Preview Content\"";
+				DEVELOPMENT_TEAM = Z93APRK365;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -445,8 +525,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"LikesFeature/Preview Content\"";
-				DEVELOPMENT_TEAM = JA868URLCA;
+				DEVELOPMENT_ASSET_PATHS = "\"Sources/Preview Content\"";
+				DEVELOPMENT_TEAM = Z93APRK365;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -583,6 +663,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EF9561352B7D8A1C007D3F81 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EF9561362B7D8A1D007D3F81 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EF9561352B7D8A1C007D3F81 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EF9560F62B7D8743007D3F81 /* Project object */;
 }
