@@ -11,6 +11,8 @@ public struct ContentView: View {
     @State private var openState: Bool = false
     @Namespace private var animation
     
+    @State private var name: String = "도화가25"
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
@@ -20,7 +22,7 @@ public struct ContentView: View {
                 .frame(maxWidth: .infinity)
             
             if !openState {
-                Image("도화가25")
+                Image(name)
                     .resizable()
                     .cornerRadius(12)
                     .matchedGeometryEffect(id: "도화가25", in: animation)
@@ -30,6 +32,7 @@ public struct ContentView: View {
                     .onTapGesture {
                         withAnimation(.spring()) {
                             openState = true
+//                            name = "안돼"
                         }
                     }
             }
@@ -39,13 +42,15 @@ public struct ContentView: View {
         .overlay {
             if openState {
                 LikesSendView(openState: $openState,
-                              ptrName: "Krrrrwalwal") {
+                              ptrName: "Krrrrwalwal",
+                              commentText: "Liked your Photo") {
                     Image("도화가25")
                         .resizable()
                         .cornerRadius(12)
                         .matchedGeometryEffect(id: "도화가25", in: animation)
                         .frame(maxWidth: .infinity)
                         .aspectRatio(1, contentMode: .fit)
+                        .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 6)
                         .padding(.horizontal, 12)
                         .padding(.top, 124)
                 }

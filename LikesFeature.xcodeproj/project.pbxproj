@@ -17,6 +17,8 @@
 		EF95612E2B7D889A007D3F81 /* LikesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95612D2B7D8899007D3F81 /* LikesFeature.swift */; };
 		EF9561372B7D8A1D007D3F81 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EF9561362B7D8A1D007D3F81 /* Kingfisher */; };
 		EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9561392B7DD584007D3F81 /* LikesSendView.swift */; };
+		EF95613D2B7DDB13007D3F81 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95613C2B7DDB13007D3F81 /* Color.swift */; };
+		EF9561402B7DEA42007D3F81 /* TextViewRepresntable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		EF95611E2B7D8745007D3F81 /* LikesFeatureUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesFeatureUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		EF95612D2B7D8899007D3F81 /* LikesFeature.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LikesFeature.swift; sourceTree = "<group>"; };
 		EF9561392B7DD584007D3F81 /* LikesSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesSendView.swift; sourceTree = "<group>"; };
+		EF95613C2B7DDB13007D3F81 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewRepresntable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +165,7 @@
 		EF9561312B7D88B2007D3F81 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EF95613E2B7DEA34007D3F81 /* ViewRepresentable */,
 				EF9561342B7D8922007D3F81 /* Extension */,
 				EF9561332B7D891F007D3F81 /* Modifier */,
 				EF9561322B7D891C007D3F81 /* Main */,
@@ -187,6 +192,7 @@
 		EF9561342B7D8922007D3F81 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				EF95613B2B7DDB0E007D3F81 /* Color */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -197,6 +203,22 @@
 				EF9561392B7DD584007D3F81 /* LikesSendView.swift */,
 			);
 			path = CustomView;
+			sourceTree = "<group>";
+		};
+		EF95613B2B7DDB0E007D3F81 /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				EF95613C2B7DDB13007D3F81 /* Color.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		EF95613E2B7DEA34007D3F81 /* ViewRepresentable */ = {
+			isa = PBXGroup;
+			children = (
+				EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */,
+			);
+			path = ViewRepresentable;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,9 +357,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF9561402B7DEA42007D3F81 /* TextViewRepresntable.swift in Sources */,
 				EF9561042B7D8743007D3F81 /* ContentView.swift in Sources */,
 				EF95612E2B7D889A007D3F81 /* LikesFeature.swift in Sources */,
 				EF9561022B7D8743007D3F81 /* LikesFeatureApp.swift in Sources */,
+				EF95613D2B7DDB13007D3F81 /* Color.swift in Sources */,
 				EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
