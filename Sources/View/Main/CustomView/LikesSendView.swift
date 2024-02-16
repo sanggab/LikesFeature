@@ -14,7 +14,9 @@ public struct LikesSendView<ContentView: View>: View {
     public var ptrName: String
     private var likesView: () -> ContentView
     
-    @State private var topPadding: CGFloat = 0
+    @State private var inputOffsetY: CGFloat = 0
+    
+    @State private var btnOffsetY: CGFloat = 0
     
     @FocusState private var keyBoardState
     
@@ -63,19 +65,20 @@ public struct LikesSendView<ContentView: View>: View {
                         }
                     }
                 
+                HStack(spacing: 0) {
+                    SUTextView(text: $commentTexT)
+                        .focused($keyBoardState)
+                        .padding(.all, 16)
+                }
+                .matchedGeometryEffect(id: "HStack", in: animation)
+                .frame(height: 98, alignment: .center)
+                .frame(maxWidth: .infinity)
+                .background(.white)
+                .cornerRadius(testState ? 0 : 8)
+                .padding(.horizontal, testState ? 0 : 20)
+                .offset(y: inputOffsetY)
+                
                 VStack(spacing: 0) {
-                    HStack(spacing: 0) {
-                        SUTextView(text: $commentTexT)
-                            .focused($keyBoardState)
-                            .padding(.all, 16)
-                    }
-                    .matchedGeometryEffect(id: "HStack", in: animation)
-                    .frame(height: 98, alignment: .center)
-                    .frame(maxWidth: .infinity)
-                    .background(.white)
-                    .cornerRadius(testState ? 0 : 8)
-                    .padding(.horizontal, testState ? 0 : 20)
-                    
                     Text(makeAttributedString())
                         .lineLimit(1)
                         .font(.system(size: 16, weight: .medium))
@@ -85,7 +88,7 @@ public struct LikesSendView<ContentView: View>: View {
                             RoundedRectangle(cornerRadius: 25)
                                 .fill(.yellow)
                         }
-                        .padding(.top, 32)
+//                        .padding(.top, 32)
                         .padding(.horizontal, 12)
                     
                     Text("Cancel")
@@ -103,14 +106,16 @@ public struct LikesSendView<ContentView: View>: View {
                     // 이때 사진의 크기를 최대 넓이의 좌우 여백 12만큼 준게 사진의 크기이므로
                     // 24를 빼준다. 그리고 47만큼 올라가야 하니까 47도 빼주고 나서
                     // 애니메이션을 20만큼 아래에서부터 올라오도록 설정해달라고 해서 20만큼 밀어준다
-                    topPadding = proxy.size.width - 49 - 24 + 124 + 20
+                    inputOffsetY = proxy.size.width - 49 - 24 + 124 + 20
+                    btnOffsetY = proxy.size.width + 124 + 81 + 20 - 24
                 }
-                .offset(y: topPadding)
+                .padding(.top, btnOffsetY)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 withAnimation(.spring()) {
-                    topPadding = proxy.size.width - 49 - 24 + 124
+                    inputOffsetY = proxy.size.width - 49 - 24 + 124
+                    btnOffsetY = proxy.size.width + 124 + 81 - 24
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { output in
@@ -128,7 +133,7 @@ public struct LikesSendView<ContentView: View>: View {
                         }
                         
                         withAnimation(.easeOut(duration: duration)) {
-                            topPadding = offsetY
+                            inputOffsetY = offsetY
                         }
                         
                     }
@@ -147,7 +152,7 @@ public struct LikesSendView<ContentView: View>: View {
                         }
                         
                         withAnimation(.easeIn(duration: duration)) {
-                            topPadding = proxy.size.width - 49 - 24 + 124
+                            inputOffsetY = proxy.size.width - 49 - 24 + 124
                         }
                     }
                 }
