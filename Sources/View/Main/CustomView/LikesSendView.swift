@@ -26,19 +26,6 @@ public struct LikesSendView<ContentView: View>: View {
     
     @State private var testState: Bool = false
     
-//    @State private var attributedString: AttributedString = .init(stringLiteral: "")
-    
-//    private var attributedString : AttributedString {
-//        var string = AttributedString("Match with Krrrrwalwal")
-//
-//        if let this = string.range(of: "Krrrrwalwal") {
-//            string[this].font = .system(size: 16, weight: .bold)
-//            string[this].foregroundColor = .black
-//        }
-//
-//        return string
-//    }
-    
     public init(openState: Binding<Bool>,
                 ptrName: String,
                 commentText: String,
@@ -74,22 +61,23 @@ public struct LikesSendView<ContentView: View>: View {
                                                       focusColor: .commentTextColor,
                                                       focusFont: .boldSystemFont(ofSize: 15)))
                         .focused($keyBoardState)
-                        .padding(.vertical, 16)
+                        .frame(width: proxy.size.width - 72, height: 66, alignment: .topLeading)
+//                        .fixedSize()
+                        .padding(.top, 16)
                         .padding(.leading, 16)
-                        .padding(.trailing, testState ? 4 : 16)
                     
                     if testState {
                         Image("iconInputDisabled")
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 24, height: 24, alignment: .topTrailing)
                             .padding(.all, 8)
-                            .padding(.top, 8)
-                            .padding(.trailing, 8)
+                            .padding(.top, 12)
+                            .padding(.leading, 4)
                     }
                 }
                 .matchedGeometryEffect(id: "HStack", in: animation)
-                .frame(height: 98, alignment: .center)
-                .frame(maxWidth: .infinity)
+                .frame(height: 98, alignment: .top)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .background(.white)
                 .cornerRadius(testState ? 0 : 8)
                 .padding(.horizontal, testState ? 0 : 20)
@@ -108,16 +96,6 @@ public struct LikesSendView<ContentView: View>: View {
                                 .padding(.horizontal, 24)
                                 .padding(.vertical, 13)
                         }
-                    
-//                    Text(makeAttributedString())
-//                        .lineLimit(1)
-//                        .font(.system(size: 16, weight: .medium))
-//                        .padding(.horizontal, 12)
-//                        .padding(.vertical, 13)
-//                        .background {
-//                            RoundedRectangle(cornerRadius: 25)
-//                                .fill(.yellow)
-//                        }
                     
                     Text("Cancel")
                         .font(.system(size: 16, weight: .medium))
