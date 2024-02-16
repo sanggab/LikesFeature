@@ -51,6 +51,7 @@ public struct LikesSendView<ContentView: View>: View {
     
     public var body: some View {
         GeometryReader { proxy in
+            let _ = print("proxy -> \(proxy.size)")
             ZStack(alignment: .topLeading) {
                 Color.gray
                     .opacity(0.7)
@@ -65,10 +66,26 @@ public struct LikesSendView<ContentView: View>: View {
                         }
                     }
                 
-                HStack(spacing: 0) {
-                    SUTextView(text: $commentTexT)
+                HStack(alignment: .top, spacing: 0) {
+                    SUTextView(text: $commentTexT,
+                               model: SUTextViewModel(placeholderText: "Add a commnent",
+                                                      placeholderColor: .placeHolderColor,
+                                                      placeholderFont: .boldSystemFont(ofSize: 15),
+                                                      focusColor: .commentTextColor,
+                                                      focusFont: .boldSystemFont(ofSize: 15)))
                         .focused($keyBoardState)
-                        .padding(.all, 16)
+                        .padding(.vertical, 16)
+                        .padding(.leading, 16)
+                        .padding(.trailing, testState ? 4 : 16)
+                    
+                    if testState {
+                        Image("iconInputDisabled")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .padding(.all, 8)
+                            .padding(.top, 8)
+                            .padding(.trailing, 8)
+                    }
                 }
                 .matchedGeometryEffect(id: "HStack", in: animation)
                 .frame(height: 98, alignment: .center)
@@ -79,17 +96,28 @@ public struct LikesSendView<ContentView: View>: View {
                 .offset(y: inputOffsetY)
                 
                 VStack(spacing: 0) {
-                    Text(makeAttributedString())
-                        .lineLimit(1)
-                        .font(.system(size: 16, weight: .medium))
+                    
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(.yellow)
+                        .frame(height: 50)
                         .padding(.horizontal, 12)
-                        .padding(.vertical, 13)
-                        .background {
-                            RoundedRectangle(cornerRadius: 25)
-                                .fill(.yellow)
+                        .overlay {
+                            Text(makeAttributedString())
+                                .lineLimit(1)
+                                .font(.system(size: 16, weight: .medium))
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 13)
                         }
-//                        .padding(.top, 32)
-                        .padding(.horizontal, 12)
+                    
+//                    Text(makeAttributedString())
+//                        .lineLimit(1)
+//                        .font(.system(size: 16, weight: .medium))
+//                        .padding(.horizontal, 12)
+//                        .padding(.vertical, 13)
+//                        .background {
+//                            RoundedRectangle(cornerRadius: 25)
+//                                .fill(.yellow)
+//                        }
                     
                     Text("Cancel")
                         .font(.system(size: 16, weight: .medium))
@@ -107,8 +135,14 @@ public struct LikesSendView<ContentView: View>: View {
                     // 24를 빼준다. 그리고 47만큼 올라가야 하니까 47도 빼주고 나서
                     // 애니메이션을 20만큼 아래에서부터 올라오도록 설정해달라고 해서 20만큼 밀어준다
                     inputOffsetY = proxy.size.width - 49 - 24 + 124 + 20
+                    
+                    
+                    // Match 버튼과 Cancel 버튼의 offset은 사진의 top inset, 사진의 크기, 첫 스타트 지점 20만큼 더해주고
+                    // 사진의 크기가 전체 크기에서 -24만큼 여백을 준 상황이므로 24를 빼주면 완성이다
+                    
                     btnOffsetY = proxy.size.width + 124 + 81 + 20 - 24
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.top, btnOffsetY)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -128,7 +162,7 @@ public struct LikesSendView<ContentView: View>: View {
                         
                         let offsetY = proxy.size.height - (size.height - proxy.safeAreaInsets.bottom) - 98
                         
-                        withAnimation(.linear) {
+                        withAnimation(.linear(duration: duration)) {
                             testState = true
                         }
                         
@@ -142,33 +176,25 @@ public struct LikesSendView<ContentView: View>: View {
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { output in
                 print("keyboardDidHideNotification")
                 if let userinfo = output.userInfo {
-                    if let size = userinfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                        guard let duration = userinfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
-                            return
-                        }
-                        
-                        withAnimation(.linear) {
-                            testState = false
-                        }
-                        
-                        withAnimation(.easeIn(duration: duration)) {
-                            inputOffsetY = proxy.size.width - 49 - 24 + 124
-                        }
+                    guard let duration = userinfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else {
+                        return
+                    }
+                    
+                    withAnimation(.linear(duration: duration)) {
+                        testState = false
+                    }
+                    
+                    withAnimation(.easeIn(duration: duration - 0.05)) {
+                        inputOffsetY = proxy.size.width - 49 - 24 + 124
                     }
                 }
             }
         }
-//        .onChange(of: topPadding, perform: { newValue in
-//            print("topPadding -> \(newValue)")
-//        })
-//        .onChange(of: keyBoardState, perform: { newValue in
-//            print("newValue -> \(newValue)")
-//        })
         .ignoresSafeArea(.keyboard, edges: .all)
     }
     
     private func makeAttributedString() -> AttributedString {
-        var string = AttributedString("Match with with with with withwithwithwithwith \(ptrName)")
+        var string = AttributedString("Match with \(ptrName)")
 
         if let this = string.range(of: ptrName) {
             string[this].font = .system(size: 16, weight: .bold)
