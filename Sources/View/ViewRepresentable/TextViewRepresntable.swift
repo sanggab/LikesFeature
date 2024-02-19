@@ -103,6 +103,14 @@ public struct TextView: UIViewRepresentable {
     
     fileprivate func updateTextCount(textView: UITextView) {
         var count: Int = 0
+        
+        let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if text == style.placeholderText || text.isEmpty {
+            textCountClosure?(count)
+            return
+        }
+        
         switch method {
         case .none:
             count = textView.text.count
@@ -181,10 +189,14 @@ public extension TextViewCoordinator {
             textView.textColor = parent.style.focusColor
             self.text.wrappedValue = textView.text
         }
+        
+        parent.updateTextCount(textView: textView)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == parent.style.placeholderText || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if text == parent.style.placeholderText || text.isEmpty {
             textView.text = parent.style.placeholderText
             textView.textColor = parent.style.placeholderColor
             textView.font = parent.style.placeholderFont
@@ -194,6 +206,7 @@ public extension TextViewCoordinator {
             self.text.wrappedValue = textView.text
         }
         
+        parent.updateTextCount(textView: textView)
         parent.updateHeight(textView: textView)
     }
     

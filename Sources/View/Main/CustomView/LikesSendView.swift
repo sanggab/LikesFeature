@@ -24,10 +24,12 @@ public struct LikesSendView<ContentView: View>: View {
     
     @Namespace private var animation
     
-    @State private var testState: Bool = false
+    @State private var textViewAnimationState: Bool = false
     @State private var textViewHeight: CGFloat = 66
     
     @State private var boxHeight: CGFloat = 98
+    @State private var sendState: Bool = false
+    @State private var shadowState: Bool = false
     
     public init(openState: Binding<Bool>,
                 ptrName: String,
@@ -43,7 +45,7 @@ public struct LikesSendView<ContentView: View>: View {
         GeometryReader { proxy in
 //            let _ = print("proxy -> \(proxy.size)")
             ZStack(alignment: .topLeading) {
-                Color.gray
+                Color.blue
                     .opacity(0.7)
                     .onTapGesture {
                         keyBoardState = false
@@ -54,6 +56,9 @@ public struct LikesSendView<ContentView: View>: View {
                         withAnimation(.spring()) {
                             openState = false
                         }
+                    }
+                    .onAppear {
+                        shadowState = true
                     }
                 
                 HStack(alignment: .top, spacing: 0) {
@@ -82,6 +87,9 @@ public struct LikesSendView<ContentView: View>: View {
                             btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32
                         }
                     }
+                    .textCount { count in
+                        sendState = count > 0
+                    }
                         .focused($keyBoardState)
                         .frame(width: proxy.size.width - 72, height: textViewHeight, alignment: .topLeading)
 //                        .frame(minHeight: textViewHeight, maxHeight: .infinity, alignment: .top)
@@ -89,13 +97,16 @@ public struct LikesSendView<ContentView: View>: View {
                         .padding(.vertical, 16)
                         .padding(.leading, 16)
                     
-                    if testState {
-                        Image("iconInputDisabled")
+                    if textViewAnimationState {
+                        Image(sendState ? "iconInput" : "iconInputDisabled")
                             .resizable()
                             .frame(width: 24, height: 24, alignment: .topTrailing)
                             .padding(.all, 8)
                             .padding(.top, 12)
                             .padding(.leading, 4)
+                            .onTapGesture {
+                                keyBoardState = false
+                            }
                     }
                 }
 //                .matchedGeometryEffect(id: "HStack", in: animation)
@@ -103,8 +114,9 @@ public struct LikesSendView<ContentView: View>: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
 //                .fixedSize(horizontal: false, vertical: true)
                 .background(.white)
-                .cornerRadius(testState ? 0 : 8)
-                .padding(.horizontal, testState ? 0 : 20)
+                .cornerRadius(textViewAnimationState ? 0 : 8)
+                .padding(.horizontal, textViewAnimationState ? 0 : 20)
+                .shadow(color: .black.opacity(shadowState ? 0.16 : 0), radius: 6, x: 0, y: 2)
                 .offset(y: inputOffsetY)
                 
                 VStack(spacing: 0) {
@@ -128,6 +140,11 @@ public struct LikesSendView<ContentView: View>: View {
                         .padding(.vertical, 13)
                         .padding(.horizontal, 14)
                         .padding(.top, 4)
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                openState = false
+                            }
+                        }
                 }
                 .onAppear {
                     // 계산식 해당 VStack은 사진의 사이즈 절발만큼 올라가야한다
@@ -152,6 +169,8 @@ public struct LikesSendView<ContentView: View>: View {
                     inputOffsetY = proxy.size.width - (boxHeight / 2) - 24 + 124
                     btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32
                 }
+                
+                shadowState = true
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { output in
                 print("keyboardWillShowNotification")
@@ -165,8 +184,10 @@ public struct LikesSendView<ContentView: View>: View {
                         
                         keyboardHeight = size.height
                         
+                        shadowState = false
+                        
                         withAnimation(.linear(duration: duration)) {
-                            testState = true
+                            textViewAnimationState = true
                         }
                         
                         withAnimation(.easeOut(duration: duration)) {
@@ -183,8 +204,10 @@ public struct LikesSendView<ContentView: View>: View {
                         return
                     }
                     
+                    shadowState = true
+                    
                     withAnimation(.linear(duration: duration)) {
-                        testState = false
+                        textViewAnimationState = false
                     }
                     
                     withAnimation(.easeIn(duration: duration - 0.05)) {
