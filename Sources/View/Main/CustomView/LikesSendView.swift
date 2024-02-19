@@ -41,7 +41,7 @@ public struct LikesSendView<ContentView: View>: View {
     
     public var body: some View {
         GeometryReader { proxy in
-            let _ = print("proxy -> \(proxy.size)")
+//            let _ = print("proxy -> \(proxy.size)")
             ZStack(alignment: .topLeading) {
                 Color.gray
                     .opacity(0.7)
@@ -57,14 +57,15 @@ public struct LikesSendView<ContentView: View>: View {
                     }
                 
                 HStack(alignment: .top, spacing: 0) {
-                    SUTextView(text: $commentTexT,
-                               model: SUTextViewModel(placeholderText: "Add a commnent",
-                                                      placeholderColor: .placeHolderColor,
-                                                      placeholderFont: .boldSystemFont(ofSize: 15),
-                                                      focusColor: .commentTextColor,
-                                                      focusFont: .boldSystemFont(ofSize: 15)))
+                    TextView(text: $commentTexT,
+                             style: TextViewStyle(placeholderText: "Add a commnent",
+                                                  placeholderColor: .placeHolderColor,
+                                                  placeholderFont: .boldSystemFont(ofSize: 15),
+                                                  focusColor: .commentTextColor,
+                                                  focusFont: .boldSystemFont(ofSize: 15)))
+                    .isScrollEnabled(false)
+                    .limitCount(.blankWithTrimLine, 150)
                     .textViewHeight { height in
-                        print("textViewHeight -> \(height)")
                         if height > 66 {
                             withAnimation(.linear(duration: 0.1)) {
                                 textViewHeight = height
