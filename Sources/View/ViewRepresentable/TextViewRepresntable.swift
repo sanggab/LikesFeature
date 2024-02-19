@@ -37,6 +37,8 @@ public struct SUTextView: UIViewRepresentable, Equatable {
     @Binding public var text: String
     public var model: SUTextViewModel
     
+    public var throwHeight: ((CGFloat) -> ())?
+    
     public init(text: Binding<String>,
                 model: SUTextViewModel) {
         self._text = text
@@ -51,30 +53,49 @@ public struct SUTextView: UIViewRepresentable, Equatable {
         textView.textColor = model.placeholderColor
         textView.delegate = context.coordinator
         textView.showsVerticalScrollIndicator = false
+        textView.isScrollEnabled = false
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
+        textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
         return textView
     }
     
     /// textView의 키보드가 닫아질 때, 이놈도 같이 호출된다. 조심하자
-    public func updateUIView(_ uiView: UIViewType, context: Context) {
-//        uiView.setContentOffset(CGPoint(x: 0, y: uiView.contentSize.height), animated: false)
+    public func updateUIView(_ textView: UIViewType, context: Context) {
+        
     }
     
     public func makeCoordinator() -> TextViewCoordinator {
         TextViewCoordinator(text: $text,
-                            model: model)
+                            parent: self)
     }
     
+    
+    @inlinable public func textViewHeight(height: ((CGFloat) -> ())? = nil) -> SUTextView {
+        var view = self
+        view.throwHeight = height
+        return view
+    }
+    
+    fileprivate func updateHeight(textView: UITextView) {
+        let size = textView.sizeThatFits(CGSize(width:
+                                                    textView.frame.size.width, height: .infinity))
+        if textView.frame.size != size {
+            textView.frame.size = size
+            throwHeight?(size.height)
+        }
+    }
 }
 
 public final class TextViewCoordinator: NSObject, UITextViewDelegate {
     var text: Binding<String>
-    public var model: SUTextViewModel
+    public var parent: SUTextView
     
     public init(text: Binding<String>,
-                model: SUTextViewModel) {
+                parent: SUTextView) {
         self.text = text
-        self.model = model
+        self.parent = parent
     }
 }
 
@@ -82,27 +103,32 @@ public extension TextViewCoordinator {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         print("textViewDidBeginEditing")
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == model.placeholderText {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == parent.model.placeholderText {
             textView.text = ""
-            textView.textColor = model.focusColor
+            textView.textColor = parent.model.focusColor
             self.text.wrappedValue = textView.text
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         print("textViewDidEndEditing")
-        print("text -> \(textView.text ?? "")")
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == model.placeholderText || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textView.text = model.placeholderText
-            textView.textColor = model.placeholderColor
-            self.text.wrappedValue = model.placeholderText
+        
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == parent.model.placeholderText || textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = parent.model.placeholderText
+            textView.textColor = parent.model.placeholderColor
+            self.text.wrappedValue = parent.model.placeholderText
         } else {
+            textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
             self.text.wrappedValue = textView.text
         }
+        
+        parent.updateHeight(textView: textView)
     }
     
     func textViewDidChange(_ textView: UITextView) {
         print("textViewDidChange")
         self.text.wrappedValue = textView.text
+        
+        parent.updateHeight(textView: textView)
     }
 }

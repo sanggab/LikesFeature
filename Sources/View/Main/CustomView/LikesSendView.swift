@@ -25,6 +25,9 @@ public struct LikesSendView<ContentView: View>: View {
     @Namespace private var animation
     
     @State private var testState: Bool = false
+    @State private var textViewHeight: CGFloat = 66
+    
+    @State private var boxHeight: CGFloat = 98
     
     public init(openState: Binding<Bool>,
                 ptrName: String,
@@ -60,10 +63,29 @@ public struct LikesSendView<ContentView: View>: View {
                                                       placeholderFont: .boldSystemFont(ofSize: 15),
                                                       focusColor: .commentTextColor,
                                                       focusFont: .boldSystemFont(ofSize: 15)))
+                    .textViewHeight { height in
+                        print("textViewHeight -> \(height)")
+                        if height > 66 {
+                            withAnimation(.linear(duration: 0.1)) {
+                                textViewHeight = height
+                                boxHeight = height + 32
+                                inputOffsetY = proxy.size.height - (keyboardHeight - proxy.safeAreaInsets.bottom) - boxHeight
+                            }
+                            btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32
+                        } else {
+                            withAnimation(.linear(duration: 0.1)) {
+                                textViewHeight = 66
+                                boxHeight = 98
+                                inputOffsetY = proxy.size.height - (keyboardHeight - proxy.safeAreaInsets.bottom) - boxHeight
+                            }
+                            btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32
+                        }
+                    }
                         .focused($keyBoardState)
-                        .frame(width: proxy.size.width - 72, height: 66, alignment: .topLeading)
+                        .frame(width: proxy.size.width - 72, height: textViewHeight, alignment: .topLeading)
+//                        .frame(minHeight: textViewHeight, maxHeight: .infinity, alignment: .top)
 //                        .fixedSize()
-                        .padding(.top, 16)
+                        .padding(.vertical, 16)
                         .padding(.leading, 16)
                     
                     if testState {
@@ -75,9 +97,10 @@ public struct LikesSendView<ContentView: View>: View {
                             .padding(.leading, 4)
                     }
                 }
-                .matchedGeometryEffect(id: "HStack", in: animation)
-                .frame(height: 98, alignment: .top)
+//                .matchedGeometryEffect(id: "HStack", in: animation)
+                .frame(height: boxHeight, alignment: .top)
                 .frame(maxWidth: .infinity, alignment: .leading)
+//                .fixedSize(horizontal: false, vertical: true)
                 .background(.white)
                 .cornerRadius(testState ? 0 : 8)
                 .padding(.horizontal, testState ? 0 : 20)
@@ -106,19 +129,18 @@ public struct LikesSendView<ContentView: View>: View {
                         .padding(.top, 4)
                 }
                 .onAppear {
-                    // 계산식 해당 VStack은 사진 bottom부터 47만큼 올라가야한다
-                    // 그래서 사진은 top에 124만큼 위치해 있어서 124만큼 더해주고
-                    // 사진의 아래쪽에 배치하기 위해 proxy.size.width 만큼 더해주는데
-                    // 이때 사진의 크기를 최대 넓이의 좌우 여백 12만큼 준게 사진의 크기이므로
-                    // 24를 빼준다. 그리고 47만큼 올라가야 하니까 47도 빼주고 나서
-                    // 애니메이션을 20만큼 아래에서부터 올라오도록 설정해달라고 해서 20만큼 밀어준다
-                    inputOffsetY = proxy.size.width - 49 - 24 + 124 + 20
+                    // 계산식 해당 VStack은 사진의 사이즈 절발만큼 올라가야한다
+                    // 현재 사진의 top inset인 124를 더하고
+                    // 사진의 높이는 디바이스 사이즈에서 좌우 여백 12를 뺀 값이므로 proxy.size.width - 24를 더해준다.
+                    // 그리고 인풋박스는 박스의 높이의 절반만큼 밀어줘야 하므로 boxHeight / 2 만큼 뺴준다음
+                    // 처음 스타트를 20밑에서부터 시작하므로 20 더해준다.
+                    inputOffsetY = 124 + proxy.size.width - 24 - (boxHeight / 2)  + 20
                     
                     
-                    // Match 버튼과 Cancel 버튼의 offset은 사진의 top inset, 사진의 크기, 첫 스타트 지점 20만큼 더해주고
-                    // 사진의 크기가 전체 크기에서 -24만큼 여백을 준 상황이므로 24를 빼주면 완성이다
+                    // Match 버튼과 Cancel 버튼의 offset은 인풋박스의 maxY에서 32만큼 더해주면된다.
+                    // 그 다음 첫 스타트를 20밑에서부터 시작하므로 20 더해준다.
                     
-                    btnOffsetY = proxy.size.width + 124 + 81 + 20 - 24
+                    btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32 + 20
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, btnOffsetY)
@@ -126,8 +148,8 @@ public struct LikesSendView<ContentView: View>: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 withAnimation(.spring()) {
-                    inputOffsetY = proxy.size.width - 49 - 24 + 124
-                    btnOffsetY = proxy.size.width + 124 + 81 - 24
+                    inputOffsetY = proxy.size.width - (boxHeight / 2) - 24 + 124
+                    btnOffsetY = 124 + proxy.size.width - 24 + (boxHeight / 2) + 32
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { output in
@@ -138,7 +160,9 @@ public struct LikesSendView<ContentView: View>: View {
                             return
                         }
                         
-                        let offsetY = proxy.size.height - (size.height - proxy.safeAreaInsets.bottom) - 98
+                        let offsetY = proxy.size.height - (size.height - proxy.safeAreaInsets.bottom) - boxHeight
+                        
+                        keyboardHeight = size.height
                         
                         withAnimation(.linear(duration: duration)) {
                             testState = true
@@ -163,7 +187,7 @@ public struct LikesSendView<ContentView: View>: View {
                     }
                     
                     withAnimation(.easeIn(duration: duration - 0.05)) {
-                        inputOffsetY = proxy.size.width - 49 - 24 + 124
+                        inputOffsetY = proxy.size.width - (boxHeight / 2) - 24 + 124
                     }
                 }
             }
