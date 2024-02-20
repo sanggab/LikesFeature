@@ -12,6 +12,7 @@ public struct LikesSendView<ContentView: View>: View {
     @Binding public var openState: Bool
     @State private var commentTexT: String = ""
     public var ptrName: String
+    public var deleteState: Bool = false
     private var likesView: () -> ContentView
     
     @State private var inputOffsetY: CGFloat = 0
@@ -34,31 +35,44 @@ public struct LikesSendView<ContentView: View>: View {
     public init(openState: Binding<Bool>,
                 ptrName: String,
                 commentText: String,
+                deleteState: Bool = false,
                 @ViewBuilder likesView: @escaping () -> ContentView) {
         self._openState = openState
         self.ptrName = ptrName
         self._commentTexT = .init(initialValue: commentText)
+        self.deleteState = deleteState
         self.likesView = likesView
     }
     
     public var body: some View {
         GeometryReader { proxy in
-//            let _ = print("proxy -> \(proxy.size)")
+            let _ = print("proxy -> \(proxy.size)")
             ZStack(alignment: .topLeading) {
-                Color.blue
-                    .opacity(0.7)
+//                Color.black
+//                    .background(.thinMaterial)
+//                    .onTapGesture {
+//                        keyBoardState = false
+//                    }
+                
+                BlurEffect(effectStyle: .light, intensity: 50)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onTapGesture {
-                        keyBoardState = false
+                        if textViewAnimationState {
+                            keyBoardState = false
+                        }
                     }
                 
                 likesView()
+                    .frame(maxWidth: .infinity)
+                    .aspectRatio(1, contentMode: .fit)
+                    .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 6)
+                    .opacity(textViewAnimationState ? 0.5 : 1)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 124)
                     .onTapGesture {
-                        withAnimation(.spring()) {
-                            openState = false
+                        if textViewAnimationState {
+                            keyBoardState = false
                         }
-                    }
-                    .onAppear {
-                        shadowState = true
                     }
                 
                 HStack(alignment: .top, spacing: 0) {
@@ -140,6 +154,7 @@ public struct LikesSendView<ContentView: View>: View {
                         .padding(.vertical, 13)
                         .padding(.horizontal, 14)
                         .padding(.top, 4)
+                        .background(.mint)
                         .onTapGesture {
                             withAnimation(.spring()) {
                                 openState = false

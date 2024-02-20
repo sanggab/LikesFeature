@@ -32,7 +32,6 @@ public struct ContentView: View {
                     .onTapGesture {
                         withAnimation(.spring()) {
                             openState = true
-//                            name = "안돼"
                         }
                     }
             }
@@ -47,12 +46,30 @@ public struct ContentView: View {
                     Image("도화가25")
                         .resizable()
                         .cornerRadius(12)
+                        .overlay {
+                            ZStack {
+                                BlurEffect(effectStyle: .light, intensity: 50)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .overlay {
+                                        Color.black
+                                            .opacity(0.4)
+                                    }
+                                    .cornerRadius(12)
+                                
+                                VStack(spacing: 0) {
+                                    Image("imgDeletedContent")
+                                        .resizable()
+                                        .frame(width: 80, height: 80)
+
+                                    Text("Deleted Content")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .foregroundColor(.white)
+                                        .lineLimit(1)
+                                        .padding(.top, 6)
+                                }
+                            }
+                        }
                         .matchedGeometryEffect(id: "도화가25", in: animation)
-                        .frame(maxWidth: .infinity)
-                        .aspectRatio(1, contentMode: .fit)
-                        .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 6)
-                        .padding(.horizontal, 12)
-                        .padding(.top, 124)
                 }
             }
         }

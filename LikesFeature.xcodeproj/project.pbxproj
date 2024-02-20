@@ -19,6 +19,8 @@
 		EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF9561392B7DD584007D3F81 /* LikesSendView.swift */; };
 		EF95613D2B7DDB13007D3F81 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95613C2B7DDB13007D3F81 /* Color.swift */; };
 		EF9561402B7DEA42007D3F81 /* TextViewRepresntable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */; };
+		EFD52EEB2B83444C00899AEA /* BlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52EEA2B83444C00899AEA /* BlurEffect.swift */; };
+		EFD52EF02B8427A300899AEA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52EEF2B8427A300899AEA /* MainCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		EF9561392B7DD584007D3F81 /* LikesSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesSendView.swift; sourceTree = "<group>"; };
 		EF95613C2B7DDB13007D3F81 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewRepresntable.swift; sourceTree = "<group>"; };
+		EFD52EEA2B83444C00899AEA /* BlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffect.swift; sourceTree = "<group>"; };
+		EFD52EEF2B8427A300899AEA /* MainCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,7 +180,7 @@
 		EF9561322B7D891C007D3F81 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				EF9561382B7DD57C007D3F81 /* CustomView */,
+				EFD52EEC2B84278700899AEA /* LikeSendView */,
 				EF9561032B7D8743007D3F81 /* ContentView.swift */,
 			);
 			path = Main;
@@ -200,7 +204,7 @@
 		EF9561382B7DD57C007D3F81 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
-				EF9561392B7DD584007D3F81 /* LikesSendView.swift */,
+				EFD52EEF2B8427A300899AEA /* MainCardView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -217,8 +221,34 @@
 			isa = PBXGroup;
 			children = (
 				EF95613F2B7DEA42007D3F81 /* TextViewRepresntable.swift */,
+				EFD52EEA2B83444C00899AEA /* BlurEffect.swift */,
 			);
 			path = ViewRepresentable;
+			sourceTree = "<group>";
+		};
+		EFD52EEC2B84278700899AEA /* LikeSendView */ = {
+			isa = PBXGroup;
+			children = (
+				EFD52EEE2B84279200899AEA /* Model */,
+				EFD52EED2B84279000899AEA /* View */,
+			);
+			path = LikeSendView;
+			sourceTree = "<group>";
+		};
+		EFD52EED2B84279000899AEA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EF9561382B7DD57C007D3F81 /* CustomView */,
+				EF9561392B7DD584007D3F81 /* LikesSendView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		EFD52EEE2B84279200899AEA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,10 +389,12 @@
 			files = (
 				EF9561402B7DEA42007D3F81 /* TextViewRepresntable.swift in Sources */,
 				EF9561042B7D8743007D3F81 /* ContentView.swift in Sources */,
+				EFD52EEB2B83444C00899AEA /* BlurEffect.swift in Sources */,
 				EF95612E2B7D889A007D3F81 /* LikesFeature.swift in Sources */,
 				EF9561022B7D8743007D3F81 /* LikesFeatureApp.swift in Sources */,
 				EF95613D2B7DDB13007D3F81 /* Color.swift in Sources */,
 				EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */,
+				EFD52EF02B8427A300899AEA /* MainCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
