@@ -32,8 +32,9 @@ public struct ContentView: View {
                     .padding(.top, 10)
                     .onTapGesture {
                         style = LikeSendStyle(state: .original,
-                                              type: .match,
+                                              type: .Like,
                                               mainCard: .image,
+                                              amberType: .amberWithfree,
                                               thumbnailImgUrl: name,
                                               comment: "Liked your photo",
                                               ptrName: "SangGab",
@@ -75,6 +76,7 @@ public struct ContentView: View {
                         style = LikeSendStyle(state: .original,
                                               type: .Like,
                                               mainCard: .text,
+                                              amberType: .free,
                                               comment: "Liked your \"about me\"",
                                               aboutMe: "I work as a model in Spain and I'm bored because I don't have any friends here. so I wan....I work as a model in Spain and I'm bored because I don't have any friends here. so I wan....I work as a model in Spain and I'm bored because I don't have any friends here. so I wan....",
                                               ptrName: "SangGab",

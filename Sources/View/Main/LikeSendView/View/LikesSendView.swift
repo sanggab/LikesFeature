@@ -270,17 +270,17 @@ public extension LikesSendView {
     private func btnView(_ proxy: GeometryProxy) -> some View {
         VStack(spacing: 0) {
             
-            RoundedRectangle(cornerRadius: 25)
-                .fill(.yellow)
-                .frame(height: 50)
-                .padding(.horizontal, 12)
-                .overlay {
-                    Text(makeAttributedString())
-                        .lineLimit(1)
-                        .font(.system(size: 16, weight: .medium))
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 13)
+            if style.type == .match {
+                freeBtnView
+            } else {
+                if style.amberType == .free {
+                    freeBtnView
+                } else if style.amberType == .amber {
+                    amberBtnView
+                } else {
+                    amberWithFreeBtnView
                 }
+            }
             
             Text("Cancel")
                 .font(.system(size: 16, weight: .medium))
@@ -313,6 +313,81 @@ public extension LikesSendView {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, btnOffsetY)
+    }
+    
+    @ViewBuilder
+    var freeBtnView: some View {
+        RoundedRectangle(cornerRadius: 25)
+            .fill(.yellow)
+            .frame(height: 50)
+            .padding(.horizontal, 12)
+            .overlay {
+                Text(makeAttributedString())
+                    .lineLimit(1)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.gray20)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 13)
+            }
+    }
+    
+    @ViewBuilder
+    var amberBtnView: some View {
+        RoundedRectangle(cornerRadius: 25)
+            .fill(.yellow)
+            .frame(height: 50)
+            .padding(.horizontal, 12)
+            .overlay {
+                HStack(spacing: 4) {
+                    Image("imgAmberS")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                    
+                    Text("Amber")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.gray20)
+                        .lineLimit(1)
+                }
+                .padding(.horizontal, 24)
+                .padding(.vertical, 13)
+            }
+    }
+    
+    @ViewBuilder
+    var amberWithFreeBtnView: some View {
+        HStack(spacing: 8) {
+            
+            HStack(spacing: 4) {
+                Image("imgAmberS")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                
+                Text("Amber")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.gray20)
+                    .lineLimit(1)
+            }
+            .padding(.vertical, 13)
+            .padding(.horizontal, 16)
+            .frame(maxHeight: 50)
+            .background(.yellow)
+            .cornerRadius(25)
+            
+            
+            RoundedRectangle(cornerRadius: 25)
+                .fill(.primary300)
+                .frame(height: 50)
+                .overlay {
+                    Text(makeAttributedString())
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.gray50)
+                        .lineLimit(1)
+                        .padding(.horizontal, 24)
+                        .padding(.vertical, 13)
+                }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 12)
     }
 }
 

@@ -23,6 +23,12 @@ import SwiftUI
     case text
 }
 
+@frozen public enum LikeAmberType: Equatable {
+    case free
+    case amber
+    case amberWithfree
+}
+
 @frozen public struct LikeSendStyle {
     
     public static let zero = LikeSendStyle(state: .original, type: .Like, mainCard: .image, id: "hoho", animation: Namespace().wrappedValue)
@@ -30,6 +36,7 @@ import SwiftUI
     public let state: LikeCardState
     public let type: LikeCardType
     public let mainCard: LikeMainCardType
+    public let amberType: LikeAmberType
     
     public let thumbnailImgUrl: String
     public let videoUrl: String
@@ -45,6 +52,7 @@ import SwiftUI
     public init(state: LikeCardState,
                 type: LikeCardType,
                 mainCard: LikeMainCardType,
+                amberType: LikeAmberType = .free,
                 thumbnailImgUrl: String = "",
                 videoUrl: String = "",
                 comment: String = "",
@@ -55,6 +63,7 @@ import SwiftUI
         self.state = state
         self.type = type
         self.mainCard = mainCard
+        self.amberType = amberType
         self.thumbnailImgUrl = thumbnailImgUrl
         self.videoUrl = videoUrl
         self.comment = comment
