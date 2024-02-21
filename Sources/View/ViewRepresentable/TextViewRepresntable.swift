@@ -80,7 +80,6 @@ public struct TextView: UIViewRepresentable {
         return textView
     }
     
-    /// textView의 키보드가 닫아질 때, 이놈도 같이 호출된다. 조심하자
     public func updateUIView(_ textView: UIViewType, context: Context) {
         
     }

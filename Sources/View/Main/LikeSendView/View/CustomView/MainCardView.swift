@@ -7,53 +7,38 @@
 
 import SwiftUI
 
-@frozen public enum LikeCardType {
-    case image
-    case video
-}
-
-@frozen public enum LikeContentState {
-    case original
-    case delete
-}
-
 public struct MainCardView: View {
+    public let style: LikeSendStyle
     
+    private var boxHeight: CGFloat = 0
     
-    public var id: AnyHashable
-    public var imgUrl: String
-    public var cardType: LikeCardType
-    public var state: LikeContentState
-    
-    
-    
-    @Namespace private var animation
-    
-    public init(id: AnyHashable,
-                imgUrl: String,
-                cardType: LikeCardType = .image,
-                state: LikeContentState = .original) {
-        self.id = id
-        self.imgUrl = imgUrl
-        self.cardType = cardType
-        self.state = state
+    public init(style: LikeSendStyle) {
+        self.style = style
     }
     
-//    public var imgUrl: URL?
-    
     public var body: some View {
-        if cardType == .image {
-            imageCardView
+        if style.mainCard == .image {
+            imgCardView
+        } else if style.mainCard == .video {
+            videoCardView
+        } else {
+            textCardView
         }
     }
     
+    public func inputBoxHeight(_ height: CGFloat) -> MainCardView {
+        var view = self
+        view.boxHeight = height
+        return view
+    }
+    
     @ViewBuilder
-    public var imageCardView: some View {
-        Image(imgUrl)
+    public var imgCardView: some View {
+        Image(style.thumbnailImgUrl)
             .resizable()
             .cornerRadius(12)
             .overlay {
-                if state == .delete {
+                if style.state == .delete {
                     ZStack {
                         BlurEffect(effectStyle: .light, intensity: 50)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -77,7 +62,67 @@ public struct MainCardView: View {
                     }
                 }
             }
-            .matchedGeometryEffect(id: id, in: animation)
+            .matchedGeometryEffect(id: style.id, in: style.animation)
+            .frame(maxWidth: .infinity)
+            .aspectRatio(1, contentMode: .fit)
+            .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 0)
+    }
+    
+    @ViewBuilder
+    public var videoCardView: some View {
+        Text("Video")
+    }
+    
+    @ViewBuilder
+    public var textCardView: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .fill(.white248)
+            .matchedGeometryEffect(id: style.id, in: style.animation)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .aspectRatio(1, contentMode: .fit)
+            .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 0)
+            .overlay {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text("About me")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(.warmgrey)
+                        .padding(.top, 36)
+                        .padding(.leading, 16)
+                    
+                    Text(style.aboutMe)
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.gray20)
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                        .padding(.bottom, boxHeight / 2)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .overlay {
+                    if style.state == .delete {
+                        ZStack {
+                            BlurEffect(effectStyle: .light, intensity: 50)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .overlay {
+                                    Color.black
+                                        .opacity(0.4)
+                                }
+                                .cornerRadius(12)
+                            
+                            VStack(spacing: 0) {
+                                Image("imgDeletedContent")
+                                    .resizable()
+                                    .frame(width: 80, height: 80)
+
+                                Text("Deleted Content")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .lineLimit(1)
+                                    .padding(.top, 6)
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
 
