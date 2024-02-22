@@ -32,9 +32,9 @@ public struct ContentView: View {
                     .padding(.top, 10)
                     .onTapGesture {
                         style = LikeSendStyle(state: .original,
-                                              type: .Like,
+                                              type: .match,
                                               mainCard: .image,
-                                              amberType: .amberWithfree,
+                                              amberType: .free,
                                               thumbnailImgUrl: name,
                                               comment: "Liked your photo",
                                               ptrName: "SangGab",

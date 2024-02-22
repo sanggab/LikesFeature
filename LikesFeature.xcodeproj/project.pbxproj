@@ -22,6 +22,8 @@
 		EFD52EEB2B83444C00899AEA /* BlurEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52EEA2B83444C00899AEA /* BlurEffect.swift */; };
 		EFD52EFF2B84348700899AEA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52EFE2B84348700899AEA /* MainCardView.swift */; };
 		EFD52F022B84352300899AEA /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52F012B84352300899AEA /* Model.swift */; };
+		EFD52F142B85B38B00899AEA /* SendLikeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52F132B85B38B00899AEA /* SendLikeAnimation.swift */; };
+		EFD52F162B85C93700899AEA /* MatchAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD52F152B85C93700899AEA /* MatchAnimation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +61,8 @@
 		EFD52EEA2B83444C00899AEA /* BlurEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurEffect.swift; sourceTree = "<group>"; };
 		EFD52EFE2B84348700899AEA /* MainCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardView.swift; sourceTree = "<group>"; };
 		EFD52F012B84352300899AEA /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		EFD52F132B85B38B00899AEA /* SendLikeAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLikeAnimation.swift; sourceTree = "<group>"; };
+		EFD52F152B85C93700899AEA /* MatchAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchAnimation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +254,8 @@
 			isa = PBXGroup;
 			children = (
 				EFD52EFE2B84348700899AEA /* MainCardView.swift */,
+				EFD52F132B85B38B00899AEA /* SendLikeAnimation.swift */,
+				EFD52F152B85C93700899AEA /* MatchAnimation.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -390,6 +396,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EFD52F162B85C93700899AEA /* MatchAnimation.swift in Sources */,
 				EFD52F022B84352300899AEA /* Model.swift in Sources */,
 				EF9561402B7DEA42007D3F81 /* TextViewRepresntable.swift in Sources */,
 				EF9561042B7D8743007D3F81 /* ContentView.swift in Sources */,
@@ -399,6 +406,7 @@
 				EF95613D2B7DDB13007D3F81 /* Color.swift in Sources */,
 				EF95613A2B7DD584007D3F81 /* LikesSendView.swift in Sources */,
 				EFD52EFF2B84348700899AEA /* MainCardView.swift in Sources */,
+				EFD52F142B85B38B00899AEA /* SendLikeAnimation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

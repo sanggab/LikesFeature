@@ -51,6 +51,7 @@ public struct TextView: UIViewRepresentable {
     public var style: TextViewStyle
     public var method: TextViewTrimMethod = .none
     public var limitCount: Int = 9999
+    public var limitLine: Int = 9999
     public var isScrollEnabled: Bool = true
     
     public var heightClosure: ((CGFloat) -> Void)?
@@ -76,6 +77,7 @@ public struct TextView: UIViewRepresentable {
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+//        textView.textContainer.maximumNumberOfLines = 5
         
         return textView
     }
@@ -155,6 +157,12 @@ public extension TextView {
         return view
     }
     
+    @inlinable func limitLine(_ lines: Int = 9999) -> TextView {
+        var view = self
+        view.limitLine = lines
+        return view
+    }
+    
     @inlinable func textViewHeight(height: ((CGFloat) -> Void)? = nil) -> TextView {
         var view = self
         view.heightClosure = height
@@ -219,28 +227,42 @@ public extension TextViewCoordinator {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         guard let currentText = textView.text else { return false }
         guard let stringRange = Range(range, in : currentText) else { return false}
-
+        
+        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+            
+            // 새로운 텍스트 높이 계산
+        let textHeight = newText.boundingRect(with: CGSize(width: textView.bounds.width, height: .greatestFiniteMagnitude),
+                                                  options: .usesLineFragmentOrigin,
+                                                  attributes: [NSAttributedString.Key.font: textView.font ?? UIFont.systemFont(ofSize: 17)],
+                                                  context: nil).height
+            
+            // 새로운 라인 수 계산
+        let numberOfLines = Int(textHeight / (textView.font?.lineHeight ?? 0))
+        
+        if numberOfLines > parent.limitLine {
+            return false
+        }
+        
         var changedText = ""
 
         switch parent.method {
         case .none:
-            changedText = currentText.replacingCharacters(in: stringRange, with: text)
+            changedText = newText
         case .whitespaces:
-            changedText = currentText.replacingCharacters(in: stringRange, with: text).trimmingCharacters(in: .whitespaces)
+            changedText = newText.trimmingCharacters(in: .whitespaces)
         case .whitespacesAndNewlines:
-            changedText = currentText.replacingCharacters(in: stringRange, with: text).trimmingCharacters(in: .whitespacesAndNewlines)
+            changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines)
         case .blankWithTrim:
-            changedText = currentText.replacingCharacters(in: stringRange, with: text).trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "")
+            changedText = newText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "")
         case .blankWithTrimLine:
-            changedText = currentText.replacingCharacters(in: stringRange, with: text).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "")
-        }
-
-        if changedText.count >= parent.limitCount {
-            textView.text = currentText.trimmingTrailingSpaces()
-            self.text.wrappedValue = textView.text
+            changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "")
         }
         
-        return changedText.count <= parent.limitCount
+        if changedText.count > parent.limitCount {
+            return false
+        }
+        
+        return true
     }
 }
 

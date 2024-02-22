@@ -26,6 +26,11 @@ public struct LikesSendView: View {
     @State private var shadowState: Bool = false
     @State private var textViewAnimationState: Bool = false
     
+    @State private var showLikeAnimation: Bool = false
+    @State private var matchAnimation: Bool = false
+    @State private var test1: Bool = false
+    @State private var offset: CGFloat = 32
+    
     @FocusState private var keyBoardState
     
     public init(openState: Binding<Bool>,
@@ -128,6 +133,23 @@ public struct LikesSendView: View {
                 }
             }
         }
+        .overlay {
+            if showLikeAnimation {
+                SendLikeAnimation()
+                    .onDisappear {
+                        print("SendLikeAnimation onDisappear")
+                        showLikeAnimation = false
+                    }
+            }
+            
+            if matchAnimation {
+                MatchAnimation()
+                    .onDisappear {
+                        print("MatchAnimation onDisappear")
+                        matchAnimation = false
+                    }
+            }
+        }
         .ignoresSafeArea(.keyboard, edges: .all)
     }
     
@@ -214,7 +236,8 @@ public extension LikesSendView {
                                           focusColor: .commentTextColor,
                                           focusFont: .boldSystemFont(ofSize: 15)))
             .isScrollEnabled(false)
-            .limitCount(.blankWithTrimLine, 150)
+            .limitCount(150)
+            .limitLine(5)
             .textViewHeight { height in
                 if height > 66 {
                     withAnimation(.linear(duration: 0.1)) {
@@ -328,6 +351,13 @@ public extension LikesSendView {
                     .foregroundColor(.gray20)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 13)
+            }
+            .onTapGesture {
+                if style.type == .Like {
+                    showLikeAnimation = true
+                } else {
+                    matchAnimation = true
+                }
             }
     }
     
