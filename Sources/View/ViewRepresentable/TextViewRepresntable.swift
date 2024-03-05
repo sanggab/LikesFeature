@@ -25,6 +25,22 @@ import SwiftUI
     case blankWithTrimLine
 }
 
+/// TextView의 입력 모드를 케이스에 따라 막는 모드
+@frozen public enum TextViewInputBreakMode {
+    /// 기본
+    case none
+    /// 개행의 입력을 막는다
+    case lineBreak
+    /// 공백의 입력을 막는다
+    case whiteSpace
+    /// 연속된 공백의 입력을 막는다
+    case continuousWhiteSpace
+    /// 개행과 공백의 입력을 막는다
+    case lineWithWhiteSpace
+    /// 개행과 연속된 공백의 입력을 막는다
+    case lineWithContinuousWhiteSpace
+}
+
 @frozen public struct TextViewStyle: Equatable {
     public var placeholderText: String
     public var placeholderColor: UIColor
@@ -50,6 +66,7 @@ public struct TextView: UIViewRepresentable {
     @Binding public var text: String
     public var style: TextViewStyle
     public var method: TextViewTrimMethod = .none
+    public var inputBreakMode: TextViewInputBreakMode = .none
     public var limitCount: Int = 9999
     public var limitLine: Int = 9999
     public var isScrollEnabled: Bool = true
@@ -144,6 +161,12 @@ public extension TextView {
         return view
     }
     
+    @inlinable func inputBreakMode(_ mode: TextViewInputBreakMode = .none) -> TextView {
+        var view = self
+        view.inputBreakMode = mode
+        return view
+    }
+    
     @inlinable func limitCount(_ count: Int = 9999) -> TextView {
         var view = self
         view.limitCount = count
@@ -225,44 +248,98 @@ public extension TextViewCoordinator {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        guard let currentText = textView.text else { return false }
-        guard let stringRange = Range(range, in : currentText) else { return false}
-        
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+        if checkInputBreakMode(textView, replacementText: text) {
+            let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
+                
+                // 새로운 텍스트 높이 계산
+            let textHeight = newText.boundingRect(with: CGSize(width: textView.bounds.width, height: .greatestFiniteMagnitude),
+                                                      options: .usesLineFragmentOrigin,
+                                                      attributes: [NSAttributedString.Key.font: textView.font ?? UIFont.systemFont(ofSize: 17)],
+                                                      context: nil).height
+                
+                // 새로운 라인 수 계산
+            let numberOfLines = Int(textHeight / (textView.font?.lineHeight ?? 0))
             
-            // 새로운 텍스트 높이 계산
-        let textHeight = newText.boundingRect(with: CGSize(width: textView.bounds.width, height: .greatestFiniteMagnitude),
-                                                  options: .usesLineFragmentOrigin,
-                                                  attributes: [NSAttributedString.Key.font: textView.font ?? UIFont.systemFont(ofSize: 17)],
-                                                  context: nil).height
+            if numberOfLines > parent.limitLine {
+                return false
+            }
             
-            // 새로운 라인 수 계산
-        let numberOfLines = Int(textHeight / (textView.font?.lineHeight ?? 0))
-        
-        if numberOfLines > parent.limitLine {
-            return false
-        }
-        
-        var changedText = ""
+            var changedText = ""
 
-        switch parent.method {
-        case .none:
-            changedText = newText
-        case .whitespaces:
-            changedText = newText.trimmingCharacters(in: .whitespaces)
-        case .whitespacesAndNewlines:
-            changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines)
-        case .blankWithTrim:
-            changedText = newText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "")
-        case .blankWithTrimLine:
-            changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "")
-        }
-        
-        if changedText.count > parent.limitCount {
+            switch parent.method {
+            case .none:
+                changedText = newText
+            case .whitespaces:
+                changedText = newText.trimmingCharacters(in: .whitespaces)
+            case .whitespacesAndNewlines:
+                changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines)
+            case .blankWithTrim:
+                changedText = newText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: " ", with: "")
+            case .blankWithTrimLine:
+                changedText = newText.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: " ", with: "")
+            }
+            
+            if changedText.count > parent.limitCount {
+                return false
+            }
+            
+            return true
+            
+        } else {
+            
             return false
         }
-        
-        return true
+    }
+    
+    func checkInputBreakMode(_ textView: UITextView, replacementText text: String) -> Bool {
+        switch parent.inputBreakMode {
+        case .lineBreak:
+            
+            if text == "\n" {
+                return false
+            } else {
+                return true
+            }
+            
+        case .whiteSpace:
+            
+            if text == " " {
+                return false
+            } else {
+                return true
+            }
+            
+        case .continuousWhiteSpace:
+            
+            let lastText = textView.text.last
+            
+            if lastText == " " && text == " " {
+                return false
+            } else {
+                return true
+            }
+            
+        case .lineWithWhiteSpace:
+            
+            if text == "\n" || text == " " {
+                return false
+            } else {
+                return true
+            }
+            
+        case .lineWithContinuousWhiteSpace:
+            
+            let lastText = textView.text.last
+            
+            if text == "\n" || lastText == " " && text == " " {
+                return false
+            } else {
+                return true
+            }
+            
+        default:
+            return true
+        }
     }
 }
 

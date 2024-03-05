@@ -48,6 +48,7 @@ import SwiftUI
     public let ptrName: String
     public let id: String
     public let animation: Namespace.ID
+    public var image: UIImage?
     
     public init(state: LikeCardState,
                 type: LikeCardType,
@@ -59,7 +60,8 @@ import SwiftUI
                 aboutMe: String = "",
                 ptrName: String = "",
                 id: String,
-                animation: Namespace.ID) {
+                animation: Namespace.ID,
+                image: UIImage? = nil) {
         self.state = state
         self.type = type
         self.mainCard = mainCard
@@ -71,5 +73,6 @@ import SwiftUI
         self.ptrName = ptrName
         self.id = id
         self.animation = animation
+        self.image = image
     }
 }

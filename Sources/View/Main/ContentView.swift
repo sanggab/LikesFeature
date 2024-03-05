@@ -14,6 +14,12 @@ public struct ContentView: View {
     @State private var name: String = "도화가25"
     @State private var style: LikeSendStyle = .zero
     
+    var image: UIImage? = nil
+    
+    init() {
+        image = UIImage(named: "도화가25")
+    }
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             
@@ -21,6 +27,15 @@ public struct ContentView: View {
                 .fill(.mint)
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
+                .background {
+                    GeometryReader { proxy in
+                        Color.clear
+                            .onAppear {
+                                print("proxy.safeAreaInsets.top -> \(proxy.safeAreaInsets.top)")
+                                print("헤더 -> \(proxy.frame(in: .global).origin)")
+                            }
+                    }
+                }
             
             if !openState {
                 Image(name)
