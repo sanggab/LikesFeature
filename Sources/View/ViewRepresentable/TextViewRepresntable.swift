@@ -41,19 +41,29 @@ import SwiftUI
     case lineWithContinuousWhiteSpace
 }
 
-@frozen public struct TextViewStyle: Equatable {
-    public var placeholderText: String
-    public var placeholderColor: UIColor
-    public var placeholderFont: UIFont
+/// TextView의 스타일 ( PlaceHolder / Basic )
+@frozen public enum TextViewStyle: Equatable {
+    /// PlaceHolder 타입
+    case placeHolder
+    /// 초기값이 있는 타입
+    case basic
+}
 
-    public var focusColor: UIColor
-    public var focusFont: UIFont
+@frozen public struct TextViewInputModel: Equatable {
+    public static let zero = TextViewInputModel(placeholderText: "", placeholderColor: .white, placeholderFont: .boldSystemFont(ofSize: 14), focusColor: .white, focusFont: .boldSystemFont(ofSize: 14))
+    
+    public var placeholderText: String = ""
+    public var placeholderColor: UIColor = .white
+    public var placeholderFont: UIFont = .boldSystemFont(ofSize: 14)
 
-    public init(placeholderText: String,
-                placeholderColor: UIColor,
-                placeholderFont: UIFont,
-                focusColor: UIColor,
-                focusFont: UIFont) {
+    public var focusColor: UIColor = .white
+    public var focusFont: UIFont = .boldSystemFont(ofSize: 14)
+
+    public init(placeholderText: String = "",
+                placeholderColor: UIColor = .white,
+                placeholderFont: UIFont = .boldSystemFont(ofSize: 14),
+                focusColor: UIColor = .white,
+                focusFont: UIFont = .boldSystemFont(ofSize: 14)) {
         self.placeholderText = placeholderText
         self.placeholderColor = placeholderColor
         self.placeholderFont = placeholderFont
@@ -64,7 +74,10 @@ import SwiftUI
 
 public struct TextView: UIViewRepresentable {
     @Binding public var text: String
-    public var style: TextViewStyle
+    public var style: TextViewStyle = .placeHolder
+//    public var placeHolderStyle: PlaceHolderStyle = .zero
+//    public var basicStyle: BasicStyle = .zero
+    public var inputModel: TextViewInputModel = .zero
     public var method: TextViewTrimMethod = .none
     public var inputBreakMode: TextViewInputBreakMode = .none
     public var limitCount: Int = 9999
@@ -75,17 +88,25 @@ public struct TextView: UIViewRepresentable {
     public var textCountClosure: ((Int) -> Void)?
     
     public init(text: Binding<String>,
-                style: TextViewStyle) {
+                style: TextViewStyle = .placeHolder) {
         self._text = text
         self.style = style
     }
     
     public func makeUIView(context: Context) -> some UITextView {
         let textView = UITextView()
+        
+        if style == .basic && !_text.wrappedValue.isEmpty {
+            textView.text = _text.wrappedValue
+            textView.textColor = inputModel.focusColor
+            textView.font = inputModel.focusFont
+        } else {
+            textView.text = inputModel.placeholderText
+            textView.textColor = inputModel.placeholderColor
+            textView.font = inputModel.placeholderFont
+        }
+        
         textView.backgroundColor = .clear
-        textView.font = style.placeholderFont
-        textView.text = style.placeholderText
-        textView.textColor = style.placeholderColor
         textView.delegate = context.coordinator
         textView.showsVerticalScrollIndicator = false
         textView.isEditable = true
@@ -94,7 +115,10 @@ public struct TextView: UIViewRepresentable {
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-//        textView.textContainer.maximumNumberOfLines = 5
+        
+        DispatchQueue.main.async {
+            self.updateTextCount(textView: textView)
+        }
         
         return textView
     }
@@ -124,7 +148,7 @@ public struct TextView: UIViewRepresentable {
         
         let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if text == style.placeholderText || text.isEmpty {
+        if text == inputModel.placeholderText || text.isEmpty {
             textCountClosure?(count)
             return
         }
@@ -197,6 +221,12 @@ public extension TextView {
         view.textCountClosure = count
         return view
     }
+    
+    @inlinable func setInputModel(_ model: TextViewInputModel = .zero) -> TextView {
+        var view = self
+        view.inputModel = model
+        return view
+    }
 }
 
 public final class TextViewCoordinator: NSObject, UITextViewDelegate {
@@ -213,10 +243,10 @@ public final class TextViewCoordinator: NSObject, UITextViewDelegate {
 public extension TextViewCoordinator {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == parent.style.placeholderText {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines) == parent.inputModel.placeholderText {
             textView.text = ""
-            textView.font = parent.style.focusFont
-            textView.textColor = parent.style.focusColor
+            textView.font = parent.inputModel.focusFont
+            textView.textColor = parent.inputModel.focusColor
             self.text.wrappedValue = textView.text
         }
         
@@ -226,11 +256,11 @@ public extension TextViewCoordinator {
     func textViewDidEndEditing(_ textView: UITextView) {
         let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        if text == parent.style.placeholderText || text.isEmpty {
-            textView.text = parent.style.placeholderText
-            textView.textColor = parent.style.placeholderColor
-            textView.font = parent.style.placeholderFont
-            self.text.wrappedValue = parent.style.placeholderText
+        if text == parent.inputModel.placeholderText || text.isEmpty {
+            textView.text = parent.inputModel.placeholderText
+            textView.textColor = parent.inputModel.placeholderColor
+            textView.font = parent.inputModel.placeholderFont
+            self.text.wrappedValue = parent.inputModel.placeholderText
         } else {
             textView.text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
             self.text.wrappedValue = textView.text

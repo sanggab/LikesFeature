@@ -229,16 +229,25 @@ public extension LikesSendView {
     @ViewBuilder
     private func likeBoxView(_ proxy: GeometryProxy) -> some View {
         HStack(alignment: .top, spacing: 0) {
+//            TextView(text: $commentText,
+//                     style: NewTextViewStyle(style: .placeHolder,
+//                                             placeholderText: "Add a commnent",
+//                                             placeholderColor: .placeHolderColor,
+//                                             placeholderFont: .boldSystemFont(ofSize: 15),
+//                                             focusColor: .commentTextColor,
+//                                             focusFont: .boldSystemFont(ofSize: 15)))
             TextView(text: $commentText,
-                     style: TextViewStyle(placeholderText: "Add a commnent",
-                                          placeholderColor: .placeHolderColor,
-                                          placeholderFont: .boldSystemFont(ofSize: 15),
-                                          focusColor: .commentTextColor,
-                                          focusFont: .boldSystemFont(ofSize: 15)))
+                     style: .basic)
+            .setInputModel(TextViewInputModel(placeholderText: "Add a Comment",
+                                              placeholderColor: .placeHolderColor,
+                                              placeholderFont: .boldSystemFont(ofSize: 15),
+                                              focusColor: .commentTextColor,
+                                              focusFont: .boldSystemFont(ofSize: 15)))
             .isScrollEnabled(false)
             .limitCount(150)
             .limitLine(5)
             .textViewHeight { height in
+                print("height -> \(height)")
                 if height > 66 {
                     withAnimation(.linear(duration: 0.1)) {
                         textViewHeight = height
@@ -256,6 +265,7 @@ public extension LikesSendView {
                 }
             }
             .textCount { count in
+                print("count -> \(count)")
                 sendState = count > 0
             }
                 .focused($keyBoardState)
